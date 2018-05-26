@@ -17,7 +17,7 @@
                     </div>
                 </div>
             </div>
-            <div class="area" v-for="(item, key) of cities" :key="key">
+            <div class="area" v-for="(item, key) of cities" :key="key" :ref="key">
                 <div class="title border-topbottom">{{key}}</div>
                 <ul class="item-list" v-for="innerItem of item" :key="innerItem.id">
                     <li class="item border-bottom">{{innerItem.name}}</li>
@@ -33,10 +33,24 @@ export default {
   name: 'CityList',
   props: {
     hot: Array,
-    cities: Object
+    cities: Object,
+    letter: String
   },
+  // 在元素挂载时
   mounted () {
     this.scroll = new BScroll(this.$refs.wrapper)
+  },
+  // 使用监听器，监听字母的变化
+  watch: {
+    letter () {
+      // 判断字母有无变化
+      if (this.letter) {
+        // 获取到要变化的dom元素，this.$ref[this.letter]获取到的是数组，要获取到对应的值，应该为this.$refs[this.letter][0]
+        const element = this.$refs[this.letter][0]
+        // 使用better-scroll插件的scrollToElement(dom元素)方法，实现对应的滚动
+        this.scroll.scrollToElement(element)
+      }
+    }
   }
 }
 </script>
