@@ -56,9 +56,12 @@ export default {
         }
         // 创建一个timer，让他在16毫秒后在执行
         this.timer = setTimeout(() => {
-          const touchY = e.touches[0].clientY - 79
+          // 获取到移动到字母的距离最顶部的高度，然后后再减去头部的高度
+          const touchY = e.touches[0].clientY - 159
+          // touchY的高度减去A到蓝色部分的高度再除以li标签的高度，向下取整，获得每一个字母的index值
           const index = Math.floor((touchY - this.startY) / 20)
           if (index >= 0 && index < this.letters.length) {
+            // 满足以上条件，向外触发函数，并将传数传出去
             this.$emit('change', this.letters[index])
           }
         }, 16)
