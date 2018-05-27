@@ -5,7 +5,7 @@
         </div>
         <div class="search-content" ref="search" v-show="keyword">
             <ul>
-                <li class="search-item border-bottom" v-for="item of list" :key="item.id">{{item.name}}</li>
+                <li class="search-item border-bottom" v-for="item of list" :key="item.id" @click="cityChange(item.name)">{{item.name}}</li>
                 <li class="search-item border-bottom" v-show="hasNoData">没有找到匹配数据</li>
             </ul>
         </div>
@@ -14,6 +14,7 @@
 
 <script>
 import BScroll from 'better-scroll'
+import { mapActions } from 'vuex'
 export default{
   name: 'CitySearch',
   props: {
@@ -57,6 +58,14 @@ export default{
         this.list = result
       }, 100)
     }
+  },
+  methods: {
+    cityChange (city) {
+      this.stateChange(city)
+      // 点击事件，改变完首页的城市和当前城市后，跳转到首页，这里用到了router的编程式路由跳转，用到了router中的push方法
+      this.$router.push('/')
+    },
+    ...mapActions(['stateChange'])
   },
   // 解决当搜索的内容很多时，不能滚动的问题
   mounted () {

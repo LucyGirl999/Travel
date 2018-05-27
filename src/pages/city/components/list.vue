@@ -5,22 +5,22 @@
                 <div class="title border-topbottom">当前城市</div>
                 <div class="button-list">
                     <div class="button-wrapper">
-                        <div class="button">北京</div>
+                        <div class="button">{{this.currentCity}}</div>
                     </div>
                 </div>
             </div>
             <div class="area">
                 <div class="title border-topbottom">热门城市</div>
                 <div class="button-list">
-                    <div class="button-wrapper" v-for="item of hot" :key="item.id">
+                    <div class="button-wrapper" v-for="item of hot" :key="item.id" @click="cityChange(item.name)">
                         <div class="button">{{item.name}}</div>
                     </div>
                 </div>
             </div>
             <div class="area" v-for="(item, key) of cities" :key="key" :ref="key">
                 <div class="title border-topbottom">{{key}}</div>
-                <ul class="item-list" v-for="innerItem of item" :key="innerItem.id">
-                    <li class="item border-bottom">{{innerItem.name}}</li>
+                <ul class="item-list">
+                    <li class="item border-bottom" v-for="innerItem of item" :key="innerItem.id" @click="cityChange(innerItem.name)">{{innerItem.name}}</li>
                 </ul>
             </div>
         </div>
@@ -29,6 +29,7 @@
 
 <script>
 import BScroll from 'better-scroll'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'CityList',
   props: {
@@ -36,9 +37,24 @@ export default {
     cities: Object,
     letter: String
   },
+  computed: {
+    ...mapState({
+    // 将store下的city功能模块的city属性，映射到计算属性的currentCity属性中去
+      currentCity: 'city'
+    })
+  },
   // 在元素挂载时
   mounted () {
     this.scroll = new BScroll(this.$refs.wrapper)
+  },
+  methods: {
+    // 当点击事件时，触发vuex中的dispatch事件，让其去改变action中的内容或触发事件
+    cityChange (city) {
+      this.stateChange(city)
+      // 点击事件，改变完首页的城市和当前城市后，跳转到首页，这里用到了router的编程式路由跳转，用到了router中的push方法
+      this.$router.push('/')
+    },
+    ...mapActions(['stateChange'])
   },
   // 使用监听器，监听字母的变化
   watch: {
