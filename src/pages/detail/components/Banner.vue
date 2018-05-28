@@ -1,26 +1,34 @@
 <template>
     <div>
         <div class="banner-wrapper" @click="handleShowGallary">
-            <img class="banner-img" src="http://img1.qunarzz.com/sight/p0/1602/de/de8400021b664c5390.img.jpg_600x330_35e2f813.jpg" alt="">
+            <img class="banner-img" :src="this.bannerImg" alt="">
             <div class="banner-info">
-                <div class="banner-title">华清宫（华清池·骊山）(AAAAA景区)</div>
-                <div class="banner-number"><span class="iconfont">&#xe626;</span>39</div>
+                <div class="banner-title">{{this.sightName}}</div>
+                <div class="banner-number"><span class="iconfont">&#xe626;</span>{{this.gallaryImgs.length}}</div>
             </div>
         </div>
-        <gallary :imgs="imgs" v-show="showGallary" @close="handleClose"></gallary>
+        <fade-animation>
+          <gallary :imgs="gallaryImgs" v-show="showGallary" @close="handleClose"></gallary>
+        </fade-animation>
     </div>
 </template>
 
 <script>
 import Gallary from 'common/gallary/Gallary'
+import FadeAnimation from 'common/fade/FadeAnimation'
 export default {
   name: 'DetailBanner',
+  props: {
+    sightName: String,
+    bannerImg: String,
+    gallaryImgs: Array
+  },
   components: {
-    Gallary
+    Gallary,
+    FadeAnimation
   },
   data () {
     return {
-      imgs: ['http://img1.qunarzz.com/sight/p0/1602/53/53cf6caed9f9b9ee90.img.jpg_350x240_34a3d53e.jpg', 'http://img1.qunarzz.com/sight/p0/1602/4d/4d8529eb55360f5090.img.jpg_350x240_9c36e5b2.jpg'],
       showGallary: false
     }
   },
@@ -67,4 +75,5 @@ export default {
           font-size: .24rem
           .iconfont
             font-size: .24rem
+            padding-right: .1rem
 </style>
